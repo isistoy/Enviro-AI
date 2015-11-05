@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThoughtDef>
+    <defName>AteGuttedCorpse</defName>
+    <durationDays>2</durationDays>
+    <stackedEffectMultiplier>0.25</stackedEffectMultiplier>
+    <stackLimit>3</stackLimit>
+    <stages>
+      <li>
+        <label>Ate gutted corpse</label>
+        <description>I ate the gutted corpse. This is a nightmare!</description>
+        <baseMoodEffect>-15</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+</Defs>

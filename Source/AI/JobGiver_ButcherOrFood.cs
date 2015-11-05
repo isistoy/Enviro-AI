@@ -224,10 +224,10 @@ namespace SK_Enviro.AI
                 Pawn preyG = prey as Pawn;
                 if (preyG == null)
                 {
-                    return (prey.Faction.GoodwillWith(Faction.OfColony) >= 0f) || (prey.def == hunter.def);
+                    return (prey.Faction != Faction.OfColony) || (prey.Faction.GoodwillWith(Faction.OfColony) >= 0f) || (prey.def == hunter.def);
                 }
                 else
-                    return (prey.Faction.GoodwillWith(Faction.OfColony) >= 0f) || (preyG.Faction.GoodwillWith(Faction.OfColony) >= 0f);
+                    return (prey.Faction != Faction.OfColony) || (preyG.Faction != Faction.OfColony) || (prey.Faction.GoodwillWith(Faction.OfColony) >= 0f) || (preyG.Faction.GoodwillWith(Faction.OfColony) >= 0f);
             }
             else
                 return prey.def == hunter.def;
