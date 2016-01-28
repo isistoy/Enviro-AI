@@ -6,12 +6,14 @@ using System.Text;
 using Verse.AI;
 using Verse;
 using RimWorld;
+using RimWorld.SquadAI;
 
 namespace SK_Enviro.AI
 {
     public class JobGiver_ButcherOrFood : ThinkNode_JobGiver
     {
-        public const int FOOD_DISTANCE = 70 * 70;
+        public const int FOOD_DISTANCE = 55 * 55;
+        private int CheckForHunger; // Random 180 to 600
 
         public HungerCategory HUNGER_THRESHOLD = HungerCategory.UrgentlyHungry;
 
@@ -29,10 +31,23 @@ namespace SK_Enviro.AI
         protected override Job TryGiveTerminalJob(Pawn pawn)
         {
 
+            IntVec3 sq = pawn.Position;
+            if (!Find.FogGrid.IsFogged(sq))
+            {
             TraverseParms traverseParams = TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, true);
 
             // Find the closest meaty-thing and eat it.
             JobDef meatJobDef = Animals_AI.GetEatMeatJobDef();
+
+            if (Find.TickManager.TicksGame - pawn.mindState.lastEngageTargetTick < CheckForHunger)
+            {
+                return null;
+            }
+            else
+            {
+
+            pawn.mindState.lastEngageTargetTick = Find.TickManager.TicksGame;
+            CheckForHunger = Rand.RangeInclusive(120, 240);
             if ((pawn.jobs.curJob == null) || ((pawn.jobs.curJob.def != meatJobDef) && pawn.jobs.curJob.checkOverrideOnExpire))
             {
                 Thing thing = FindMeat(pawn, traverseParams);
@@ -48,7 +63,7 @@ namespace SK_Enviro.AI
                     return new Job(meatJobDef, thing);
                 }
             }
-
+            
             // Find the closest dead meaty-thing and eat it.
             JobDef corpseJobDef = Animals_AI.GetEatCorpseJobDef();
             if ((pawn.jobs.curJob == null) || ((pawn.jobs.curJob.def != corpseJobDef) && pawn.jobs.curJob.checkOverrideOnExpire))
@@ -69,6 +84,7 @@ namespace SK_Enviro.AI
                 {
                     if (closestPrey.Faction == Faction.OfColony)
                     {
+                        pawn.Faction.HostileTo(Faction.OfColony);
                         Find.LetterStack.ReceiveLetter("LetterLabelHungryAnimal".Translate(), "HungryAnimal".Translate(), LetterType.BadNonUrgent, pawn.Position, null);
                     }
                     return new Job(huntJobDef)
@@ -112,7 +128,8 @@ namespace SK_Enviro.AI
                 {
                     if (prey.Faction == Faction.OfColony)
                     {
-                        Find.LetterStack.ReceiveLetter("LetterLabelHungryAnimal".Translate(), "HungryAnimal".Translate(), LetterType.BadUrgent, pawn.Position, null);
+                            Find.TickManager.slower.SignalForceNormalSpeedShort();
+                            Find.LetterStack.ReceiveLetter("LetterLabelHungryAnimal".Translate(), "HungryAnimal".Translate(), LetterType.BadUrgent, pawn.Position, null);
                     }
                     target = prey.Position;
                     targetFound = true;
@@ -128,6 +145,8 @@ namespace SK_Enviro.AI
                 }
                 
                 // get blocking thing
+                if (pawn.Faction != Faction.OfColony)
+                {
                 PawnPath pawnPath = PathFinder.FindPath(pawn.Position, target, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.PassDoors, false), PathEndMode.OnCell);
                 IntVec3 CellInFront;
                 Building door = pawnPath.FirstBlockingBuilding(out CellInFront) as Building;
@@ -144,8 +163,12 @@ namespace SK_Enviro.AI
                     //checkOverrideOnExpire = true,
                     expiryInterval = 500
                 };
+              }
             }
 
+            return null;
+        }
+        }
             return null;
         }
 
@@ -272,5 +295,6 @@ namespace SK_Enviro.AI
         {
             return (pawn.Position - thing.Position).LengthHorizontalSquared <= FOOD_DISTANCE;
         }
+          
     }
 }

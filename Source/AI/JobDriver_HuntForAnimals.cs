@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Text;
 using System.Collections.Generic;
-
+using RimWorld;
+using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -36,8 +37,15 @@ namespace SK_Enviro.AI
             {
                 Pawn actor = followAndAttack.actor;
                 Job curJob = actor.jobs.curJob;
+
                 Thing t = curJob.GetTarget(TargetIndex.A).Thing;
                 Pawn pawn2 = t as Pawn;
+
+                if (pawn.Faction != Faction.OfColony)
+                {
+                    actor.mindState.broken.StartBrokenState(DefDatabase<SK_Enviro.AI.BrokenStateDef>.GetNamed("HungerState"));
+                }
+
                 if ((t != actor.pather.Destination.Thing) || (!pawn.pather.Moving && !pawn.Position.AdjacentTo8WayOrInside(t)))
                 {
                     actor.pather.StartPath(t, PathEndMode.Touch);

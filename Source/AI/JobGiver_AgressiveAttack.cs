@@ -7,11 +7,11 @@ using Verse;
 using Verse.AI;
 using RimWorld;
 
-namespace SK_Enviro
+namespace SK_Enviro.AI
 {
     class JobGiver_AgressiveAttack : ThinkNode_JobGiver
     {
-        public const float MaxSearchDistance = 2f;
+        public const float MaxSearchDistance = 1f;
         private const int EnemyForgetTime = 200;
         private const int MaxMeleeChaseTicksMax = 600;
 

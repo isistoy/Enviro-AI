@@ -11,7 +11,7 @@ namespace SK_Enviro.AI
 {
     public static class HerdAIUtility_Pets
     {
-        public const int HERD_DISTANCE = 30 * 30;
+        public const int HERD_DISTANCE = 20 * 20;
 
         public static IEnumerable<Pawn> FindHerdMembers(Pawn pawn)
         {
