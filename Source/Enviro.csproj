@@ -41,13 +41,15 @@
     <Compile Include="Source\AI\JobDriver_HuntForAnimals.cs" />
     <Compile Include="Source\AI\JobGiver_AgressiveAttack.cs" />
     <Compile Include="Source\AI\JobGiver_ButcherOrFood.cs" />
+    <Compile Include="Source\AI\BrokenState_HungerState.cs" />
+    <Compile Include="Source\AI\BrokenStateDef.cs" />
+    <Compile Include="Source\AI\JobGiver_DefendAnimal.cs" />
     <Compile Include="Source\AI\JobGiver_FunTime.cs" />
     <Compile Include="Source\AI\JobGiver_DefendPack.cs" />
-    <Compile Include="Source\AI\JobGiver_DefendAnimal.cs" />
+    <Compile Include="Source\AI\JobGiver_DefendAnimalAggressive.cs" />
     <Compile Include="Source\AI\JobGiver_HuntWithAnimal.cs" />
     <Compile Include="Source\AI\ThinkNode_CheckNearbyPawns.cs" />
     <Compile Include="Source\AI\ThinkNode_Conditions.cs" />
-    <Compile Include="Source\IncidentWorker_RaptorPasses.cs" />
     <Compile Include="Source\Seeds\Genstep_SeedDropPod.cs" />
     <Compile Include="Source\Seeds\JobDriver_HaulToCell.cs" />
     <Compile Include="Source\Seeds\JobDriver_PlantSowWithSeeds.cs" />

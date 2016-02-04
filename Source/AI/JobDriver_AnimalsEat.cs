@@ -24,6 +24,18 @@ namespace SK_Enviro.AI
                     {
                         Pawn actor = resFood.actor;
                         Thing target = resFood.actor.CurJob.GetTarget(TargetIndex.A).Thing;
+                        if (target != null)
+                        {
+                            PawnPath pawnPath = PathFinder.FindPath(pawn.Position, target, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.PassDoors, false), PathEndMode.OnCell);
+                            IntVec3 bCellInFront;
+                            Building building = pawnPath.FirstBlockingBuilding(out bCellInFront) as Building;
+                            if (building != null)
+                            {
+                                pawnPath.ReleaseToPool();
+                                actor.jobs.EndCurrentJob(JobCondition.Incompletable);
+                            }
+
+                        }
                         if ((FoodUtility.WillEatStackCountOf(actor, target.def) >= target.stackCount) && (!target.SpawnedInWorld || !Find.Reservations.Reserve(actor, target, 1)))
                         {
                             actor.jobs.EndCurrentJob(JobCondition.Incompletable);

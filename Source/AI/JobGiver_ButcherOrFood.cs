@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Reflection;
 using Verse.AI;
 using Verse;
 using RimWorld;
@@ -47,7 +47,7 @@ namespace SK_Enviro.AI
             {
 
             pawn.mindState.lastEngageTargetTick = Find.TickManager.TicksGame;
-            CheckForHunger = Rand.RangeInclusive(120, 240);
+            CheckForHunger = Rand.RangeInclusive(60, 160);
             if ((pawn.jobs.curJob == null) || ((pawn.jobs.curJob.def != meatJobDef) && pawn.jobs.curJob.checkOverrideOnExpire))
             {
                 Thing thing = FindMeat(pawn, traverseParams);
@@ -82,11 +82,27 @@ namespace SK_Enviro.AI
                 Pawn closestPrey = FindMeatyPrey(pawn, traverseParams);
                 if (closestPrey != null)
                 {
-                    if (closestPrey.Faction == Faction.OfColony)
+                    PawnPath pawnPath2 = PathFinder.FindPath(pawn.Position, closestPrey, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.PassDoors, false), PathEndMode.OnCell);
+                    IntVec3 CellInFront2;
+                    Building_Door door2 = pawnPath2.FirstBlockingBuilding(out CellInFront2) as Building_Door;
+                    if (door2 != null)
                     {
-                        pawn.Faction.HostileTo(Faction.OfColony);
-                        Find.LetterStack.ReceiveLetter("LetterLabelHungryAnimal".Translate(), "HungryAnimal".Translate(), LetterType.BadNonUrgent, pawn.Position, null);
+                        if (!door2.Open)
+                        {
+                        // release the path
+                        pawnPath2.ReleaseToPool();
+                        return new Job(Animals_AI.GetBashDoorJobDef(), CellInFront2, door2)
+                        {
+                            maxNumMeleeAttacks = 4,
+                            //checkOverrideOnExpire = true,
+                            expiryInterval = 500
+                        };
+                        }
                     }
+                        if (closestPrey.Faction == Faction.OfColony)
+                        {
+                            Find.LetterStack.ReceiveLetter("LetterLabelHungryAnimal".Translate(), "HungryAnimal".Translate(), LetterType.BadNonUrgent, pawn.Position, null);
+                        }
                     return new Job(huntJobDef)
                     {
                         targetA = closestPrey,
@@ -128,7 +144,6 @@ namespace SK_Enviro.AI
                 {
                     if (prey.Faction == Faction.OfColony)
                     {
-                            Find.TickManager.slower.SignalForceNormalSpeedShort();
                             Find.LetterStack.ReceiveLetter("LetterLabelHungryAnimal".Translate(), "HungryAnimal".Translate(), LetterType.BadUrgent, pawn.Position, null);
                     }
                     target = prey.Position;
@@ -149,25 +164,26 @@ namespace SK_Enviro.AI
                 {
                 PawnPath pawnPath = PathFinder.FindPath(pawn.Position, target, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.PassDoors, false), PathEndMode.OnCell);
                 IntVec3 CellInFront;
-                Building door = pawnPath.FirstBlockingBuilding(out CellInFront) as Building;
+                Building_Door door = pawnPath.FirstBlockingBuilding(out CellInFront) as Building_Door;
 
                 // double check make sure the target is a building (really shouldn't matter).
                 if (door == null) return null;
-
-                // release the path
-                pawnPath.ReleaseToPool();
-
-                return new Job(Animals_AI.GetBashDoorJobDef(), CellInFront, door)
-                {
-                    maxNumMeleeAttacks = 4,
-                    //checkOverrideOnExpire = true,
-                    expiryInterval = 500
-                };
-              }
+                    if (!door.Open)
+                    {
+                    // release the path
+                    pawnPath.ReleaseToPool();
+                    return new Job(Animals_AI.GetBashDoorJobDef(), CellInFront, door)
+                    {
+                        maxNumMeleeAttacks = 4,
+                        //checkOverrideOnExpire = true,
+                        expiryInterval = 500
+                    };
+                    }
+                }
             }
 
             return null;
-        }
+          }
         }
             return null;
         }
@@ -215,7 +231,9 @@ namespace SK_Enviro.AI
             return (hunter != prey)
                 && !prey.Dead
                 && !isFriendly(hunter, prey)
+                && !isAlly(hunter, prey)
                 && !isGuest(hunter, prey)
+                && !isMech(hunter, prey)
                 && !isOwnRace(hunter, prey)
                 && isNearby(hunter, prey)
                 && (prey.RaceProps.baseBodySize < hunter.RaceProps.baseBodySize || (hunter.needs.food.CurCategory == HungerCategory.UrgentlyHungry));
@@ -237,6 +255,47 @@ namespace SK_Enviro.AI
             else
                 return prey.def == hunter.def;
 
+        }
+
+        private static bool isAlly(Pawn hunter, Pawn prey)
+        {
+            Pawn pet = (Pawn)hunter;
+
+            if (hunter.Faction != null)
+            {
+            if (hunter.Faction == prey.Faction)
+            {
+                Pawn preyA = prey as Pawn;
+                if (preyA == null)
+                {
+                    return (prey.def != hunter.def);
+                }
+                else
+                    return (hunter.Faction == preyA.Faction);
+            }
+            else
+                return prey.def == hunter.def;
+            }
+            else
+                return prey.def == hunter.def;
+        }
+
+
+        private static bool isMech(Pawn hunter, Pawn prey)
+        {
+            Pawn pet = (Pawn)hunter;
+            if (prey.Faction == Faction.OfMechanoids)
+            {
+                Pawn preyM = prey as Pawn;
+                if (preyM == null)
+                {
+                    return (prey.def != hunter.def);
+                }
+                else
+                    return (preyM.Faction == Faction.OfMechanoids);
+            }
+            else
+                return prey.def == hunter.def;
         }
 
         private static bool isGuest(Pawn hunter, Pawn prey)

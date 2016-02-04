@@ -53,7 +53,7 @@ namespace SK_Enviro.AI
                         checkOverrideOnExpire = true,
                         expiryInterval = 500
                     };
-                } 
+                }
             }
             return null;
         }

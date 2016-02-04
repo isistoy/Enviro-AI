@@ -137,6 +137,7 @@ namespace SK_Enviro.AI
             {
                 int amount = Mathf.RoundToInt(apparel.HitPoints * Rand.Range((float)0.25f, (float)0.75f));
                 apparel.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, amount, null, null, null));
+                ForbidUtility.SetForbidden(apparel, true, true);
             }
             corpse.Strip();
         }

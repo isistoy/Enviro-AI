@@ -9,7 +9,7 @@ namespace SK_Enviro.AI
     {
         public override void PostStart()
         {
-            ConceptDecider.TeachOpportunity(ConceptDefOf.AnimalsDontAttackDoors, OpportunityType.Critical);
+       //     ConceptDecider.TeachOpportunity(ConceptDefOf., OpportunityType.Critical);
         }
 
         public override bool ForceHostileTo(Thing t)

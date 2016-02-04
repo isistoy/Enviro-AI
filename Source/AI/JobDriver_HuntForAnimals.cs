@@ -45,7 +45,10 @@ namespace SK_Enviro.AI
                 {
                     actor.mindState.broken.StartBrokenState(DefDatabase<SK_Enviro.AI.BrokenStateDef>.GetNamed("HungerState"));
                 }
-
+                if (t.Faction == Faction.OfColony)
+                {
+                    Find.TickManager.slower.SignalForceNormalSpeedShort();
+                }
                 if ((t != actor.pather.Destination.Thing) || (!pawn.pather.Moving && !pawn.Position.AdjacentTo8WayOrInside(t)))
                 {
                     actor.pather.StartPath(t, PathEndMode.Touch);
