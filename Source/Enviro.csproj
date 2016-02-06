@@ -32,39 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Source\AI\Animals_AI.cs" />
-    <Compile Include="Source\AI\HerdAIUtility_Animals.cs" />
-    <Compile Include="Source\AI\JobDriver_BashDoor.cs" />
-    <Compile Include="Source\AI\JobDriver_FunTime.cs" />
-    <Compile Include="Source\AI\JobDriver_EatCorpse.cs" />
-    <Compile Include="Source\AI\JobDriver_AnimalsEat.cs" />
-    <Compile Include="Source\AI\JobDriver_HuntForAnimals.cs" />
-    <Compile Include="Source\AI\JobGiver_AgressiveAttack.cs" />
-    <Compile Include="Source\AI\JobGiver_ButcherOrFood.cs" />
-    <Compile Include="Source\AI\BrokenState_HungerState.cs" />
-    <Compile Include="Source\AI\BrokenStateDef.cs" />
-    <Compile Include="Source\AI\JobGiver_DefendAnimal.cs" />
-    <Compile Include="Source\AI\JobGiver_FunTime.cs" />
-    <Compile Include="Source\AI\JobGiver_DefendPack.cs" />
-    <Compile Include="Source\AI\JobGiver_DefendAnimalAggressive.cs" />
-    <Compile Include="Source\AI\JobGiver_HuntWithAnimal.cs" />
-    <Compile Include="Source\AI\ThinkNode_CheckNearbyPawns.cs" />
-    <Compile Include="Source\AI\ThinkNode_Conditions.cs" />
-    <Compile Include="Source\Seeds\Genstep_SeedDropPod.cs" />
-    <Compile Include="Source\Seeds\JobDriver_HaulToCell.cs" />
-    <Compile Include="Source\Seeds\JobDriver_PlantSowWithSeeds.cs" />
-    <Compile Include="Source\Seeds\PlantGenome.cs" />
-    <Compile Include="Source\Seeds\PlantGenomeProperties.cs" />
-    <Compile Include="Source\Seeds\PlantWithSeeds.cs" />
-    <Compile Include="Source\Seeds\StockGenerator_Seeds.cs" />
-    <Compile Include="Source\Seeds\ThingDef_PlantSeedItem.cs" />
-    <Compile Include="Source\Seeds\ThingDef_PlantWithSeeds.cs" />
-    <Compile Include="Source\Seeds\Thing_PlantSeedsItem.cs" />
-    <Compile Include="Source\Seeds\Utils_Plants.cs" />
-    <Compile Include="Source\Seeds\JobDriver_PlantHarvestWithSeeds.cs" />
-    <Compile Include="Source\Seeds\WorkGiver_GrowerSowWithSeeds.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\RimWorld914Win\RimWorld914Win_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -76,6 +43,39 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AI\Animals_AI.cs" />
+    <Compile Include="AI\BrokenStateDef.cs" />
+    <Compile Include="AI\BrokenState_HungerState.cs" />
+    <Compile Include="AI\HerdAIUtility_Animals.cs" />
+    <Compile Include="AI\JobDriver_AnimalsEat.cs" />
+    <Compile Include="AI\JobDriver_BashDoor.cs" />
+    <Compile Include="AI\JobDriver_EatCorpse.cs" />
+    <Compile Include="AI\JobDriver_FunTime.cs" />
+    <Compile Include="AI\JobDriver_HuntForAnimals.cs" />
+    <Compile Include="AI\JobGiver_AgressiveAttack.cs" />
+    <Compile Include="AI\JobGiver_ButcherOrFood.cs" />
+    <Compile Include="AI\JobGiver_DefendAnimal.cs" />
+    <Compile Include="AI\JobGiver_DefendAnimalAggressive.cs" />
+    <Compile Include="AI\JobGiver_DefendPack.cs" />
+    <Compile Include="AI\JobGiver_FunTime.cs" />
+    <Compile Include="AI\JobGiver_HuntWithAnimal.cs" />
+    <Compile Include="AI\ThinkNode_CheckNearbyPawns.cs" />
+    <Compile Include="AI\ThinkNode_Conditions.cs" />
+    <Compile Include="Seeds\Genstep_SeedDropPod.cs" />
+    <Compile Include="Seeds\JobDriver_HaulToCell.cs" />
+    <Compile Include="Seeds\JobDriver_PlantHarvestWithSeeds.cs" />
+    <Compile Include="Seeds\JobDriver_PlantSowWithSeeds.cs" />
+    <Compile Include="Seeds\PlantGenome.cs" />
+    <Compile Include="Seeds\PlantGenomeProperties.cs" />
+    <Compile Include="Seeds\PlantWithSeeds.cs" />
+    <Compile Include="Seeds\StockGenerator_Seeds.cs" />
+    <Compile Include="Seeds\ThingDef_PlantSeedItem.cs" />
+    <Compile Include="Seeds\ThingDef_PlantWithSeeds.cs" />
+    <Compile Include="Seeds\Thing_PlantSeedsItem.cs" />
+    <Compile Include="Seeds\Utils_Plants.cs" />
+    <Compile Include="Seeds\WorkGiver_GrowerSowWithSeeds.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
